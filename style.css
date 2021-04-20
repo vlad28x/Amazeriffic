@@ -1,5 +1,6 @@
 header, main, footer {
 	min-width: 855px;
+	overflow: auto;
 }
 
 header .container, main .container, footer .container {
@@ -15,8 +16,16 @@ header {
 	background: white;
 }
 
+header h1, .main, .contact {
+	float: left;
+	width: 570px;
+}
+
+header nav, main img, .sitemap {
+	float: right;
+	width: 285px;
+}
+
 main {
 	background: white;
 }
-
-
