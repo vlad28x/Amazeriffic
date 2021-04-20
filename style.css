@@ -1,5 +1,10 @@
 header, main, footer {
-	width: 855px;
+	min-width: 855px;
+}
+
+header .container, main .container, footer .container {
+	max-width: 855px;
+	margin: auto;
 }
 
 body {
