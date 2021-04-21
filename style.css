@@ -88,6 +88,10 @@ main p {
 	margin: 10px 0px;
 }
 
+main h2 {
+	margin-bottom: 10px;
+}
+
 main ul {
 	margin: 10px 0px;
 	padding: 0px 20px;
