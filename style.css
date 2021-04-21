@@ -33,6 +33,15 @@ h5 {
 	font-size: 18px;
 }
 
+a {
+	text-decoration: none;
+	color: red;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 header, main, footer {
 	overflow: auto;
 	min-width: 855px;
