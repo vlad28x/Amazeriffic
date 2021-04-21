@@ -6,9 +6,10 @@
     font-display: swap;
 }
 
-html {
+body {
 	font-family: "Droid Sans";
 	font-size: 100%;
+	background: #f9e933;
 }
 
 h1, h2, h3, h4 {
@@ -32,15 +33,8 @@ h5 {
 	font-size: 18px;
 }
 
-body {
-	background: #f9e933;
-}
-
-.container {
-	overflow: hidden;
-}
-
 header, main, footer {
+	overflow: auto;
 	min-width: 855px;
 }
 
@@ -48,7 +42,7 @@ header, main {
 	background: white;
 }
 
-header .container, main .container, footer .container {
+.container {
 	max-width: 855px;
 	margin: auto;
 }
@@ -61,4 +55,48 @@ header h1, .main, .contact {
 header nav, .image, .sitemap {
 	float: right;
 	width: 285px;
+}
+
+header {
+	border-bottom: 2px solid #f9e933;
+	padding: 15px;
+}
+
+nav a {
+	padding: 0px 5px;
+}
+
+nav a:nth-child(2) {
+	border-left: 2px solid #f9e933;
+	border-right: 2px solid #f9e933;
+}
+
+main {
+	padding: 15px;
+}
+
+main p {
+	margin: 10px 0px;
+}
+
+main ul {
+	margin: 10px 0px;
+	padding: 0px 20px;
+	list-style: circle;
+}
+
+main ul li {
+	margin: 5px 0px;
+}
+
+footer {
+	padding: 40px 15px 1px 15px;
+}
+
+footer h5 {
+	margin-bottom: 20px; 
+}
+
+.sitemap ul {
+	columns: 2;
 }
