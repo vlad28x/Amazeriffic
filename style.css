@@ -1,19 +1,36 @@
-header, main, footer {
-	min-width: 855px;
-	overflow: auto;
+@font-face {
+    font-family: 'Droid Sans';
+    src: url('fonts/DroidSans.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
-header .container, main .container, footer .container {
-	max-width: 855px;
-	margin: auto;
+html {
+	font-family: "Droid Sans";
+	font-size: 100%;
+}
+
+h1, h2, h3, h4 {
+	font-family: "Ubuntu";
 }
 
 body {
 	background: #f9e933;
 }
 
-header {
+header, main, footer {
+	overflow: hidden;
+	min-width: 855px;
+}
+
+header, main {
 	background: white;
+}
+
+header .container, main .container, footer .container {
+	max-width: 855px;
+	margin: auto;
 }
 
 header h1, .main, .contact {
@@ -24,8 +41,4 @@ header h1, .main, .contact {
 header nav, main img, .sitemap {
 	float: right;
 	width: 285px;
-}
-
-main {
-	background: white;
 }
