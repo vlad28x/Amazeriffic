@@ -92,13 +92,13 @@ main h2 {
 	margin-bottom: 10px;
 }
 
-main ul {
+.main ul {
 	margin: 10px 0px;
 	padding: 0px 20px;
 	list-style: circle;
 }
 
-main ul li {
+.main ul li {
 	margin: 5px 0px;
 }
 
@@ -112,4 +112,36 @@ footer h5 {
 
 .sitemap ul {
 	columns: 2;
+}
+
+.tabs a span {
+	display: inline-block;
+	border-radius: 5px 5px 0 0;
+	width: 100px;
+	margin-right: 10px;
+	text-align: center;
+	background: #ddd;
+	padding: 5px;
+}
+
+.tabs a span.active {
+	background: #eee;
+}
+
+.content {
+	background: #eee;
+	border-radius: 0px 5px 5px 5px;
+	padding: 10px;
+}
+
+.content li {
+	margin-bottom: 10px; 
+	padding: 3px;
+	background: white;
+	border-radius: 3px;
+}
+
+.content li:last-child {
+	margin-bottom: 0px; 
+	background: white;
 }
