@@ -36,6 +36,12 @@ var main = function() {
 						$input.val("");
 					}
 				}); 
+				$(".content input").on("keypress", function(event) {
+					if(event.keyCode === 13 && $(".content input").val() !== "") {
+						toDos.push($(".content input").val());
+						$(".content input").val("");
+					}
+				});
 			}
 			return false;
 		});
