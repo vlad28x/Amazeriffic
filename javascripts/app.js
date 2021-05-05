@@ -1,10 +1,10 @@
 var main = function(toDoObjects) {
 	"use strict";
-	var toDos = toDoObjects.map(function(toDo) {
-		return toDo.description;
-	});
 	$(".tabs a span").toArray().forEach(function(element) {
 		$(element).on("click", function() {
+			var toDos = toDoObjects.map(function(toDo) {
+				return toDo.description;
+			});
 			var $element = $(element);
 			var $content;
 			$(".tabs a span").removeClass("active");
@@ -34,18 +34,29 @@ var main = function(toDoObjects) {
 					$("main .content").append($content);
 				});
 			} else if ($element.parent().is(":nth-child(4)")) {
-				$("main .content").append($("<input>")).append($("<button>").text("+"));
-				$(".content button").on("click", function() {
-					var $input = $(".content input");
-					if($input.val() !== "") {
-						toDos.push($input.val());
-						$input.val("");
+				var input = function() {
+					var $inputDescription = $(".content .description");
+					var textDescription = $inputDescription.val();
+					var $inputTag = $(".content .tag");
+					var textTag = $inputTag.val().replace(/\s+/g, " ").trim().replace(/,\s/g, ",");
+					if(textDescription !== "" && textTag !== "") {
+						toDoObjects.push({"description" : textDescription, "tags" : textTag.split(",")});
+						$inputDescription.val("");
+						$inputTag.val("");
 					}
+				}
+				var $inputDescriptionLabel = $("<p>").text("Описание");
+				var $inputDescription = $("<input>").addClass("description");
+				var $inputTagDescription = $("<p>").text("Теги");
+				var $inputTag = $("<input>").addClass("tag");
+				var $button = $("<button>").text("+");
+				$("main .content").append($inputDescriptionLabel, $inputDescription, $inputTagDescription, $inputTag, $button);
+				$(".content button").on("click", function() {
+					input();
 				}); 
 				$(".content input").on("keypress", function(event) {
-					if(event.keyCode === 13 && $(".content input").val() !== "") {
-						toDos.push($(".content input").val());
-						$(".content input").val("");
+					if(event.keyCode === 13) {
+						input();
 					}
 				});
 			}
@@ -54,11 +65,6 @@ var main = function(toDoObjects) {
 	});
 	$(".tabs a:first-child span").trigger("click");
 }
-$(document).ready(function() {
-	$.getJSON("todos.json", function(toDoObjects) {
-		main(toDoObjects);
-	});
-});
 function organizeByTag(toDoObjects) {
 	var arrayTags = [];
 	toDoObjects.forEach(function(toDo) {
@@ -75,3 +81,8 @@ function organizeByTag(toDoObjects) {
 	});
 	return organizeByTag;
 }
+$(document).ready(function() {
+	$.getJSON("todos.json", function(toDoObjects) {
+		main(toDoObjects);
+	});
+});
