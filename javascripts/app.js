@@ -23,6 +23,8 @@ var main = function(toDoObjects) {
 				});
 				$("main .content").append($content);
 			} else if ($element.parent().is(":nth-child(3)")) {
+				//Теги
+			} else if ($element.parent().is(":nth-child(4)")) {
 				$("main .content").append($("<input>")).append($("<button>").text("+"));
 				$(".content button").on("click", function() {
 					var $input = $(".content input");
