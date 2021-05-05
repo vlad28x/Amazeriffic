@@ -23,32 +23,7 @@ var main = function(toDoObjects) {
 				});
 				$("main .content").append($content);
 			} else if ($element.parent().is(":nth-child(3)")) {
-				var organizedByTag = [
-					{
-						"name": "покупки",
-						"toDos": ["Купить продукты"]
-					},
-					{
-						"name": "рутина",
-						"toDos": ["Купить продукты", "Вывести Грейси на прогулку в парк"]
-					},
-					{
-						"name": "писательство",
-						"toDos": ["Сделать несколько новых задач", "Закончить писать книгу"]
-					},
-					{
-						"name": "работа",
-						"toDos": ["Сделать несколько новых задач", "Подготовиться к лекции в понедельник","Ответить на электронные письма", "Закончить писать книгу"]
-					},
-					{
-						"name": " преподавание",
-						"toDos": ["Подготовиться к лекции в понедельник"]
-					},
-					{
-						"name": "питомцы",
-						"toDos": ["Вывести Грейси на прогулку в парк "]
-					}
-				];
+				var organizedByTag = organizeByTag(toDoObjects);
 				organizedByTag.forEach(function(tag) {
 					var $tagName = $("<h3>").text(tag.name), $content = $("<ul>");
 					tag.toDos.forEach(function(description) {
@@ -84,3 +59,19 @@ $(document).ready(function() {
 		main(toDoObjects);
 	});
 });
+function organizeByTag(toDoObjects) {
+	var arrayTags = [];
+	toDoObjects.forEach(function(toDo) {
+		toDo.tags.forEach(function(tag) {
+			if(arrayTags.indexOf(tag) === -1) arrayTags.push(tag);
+		});
+	});
+	var organizeByTag = arrayTags.map(function(tag) {
+		var toDosTags = [];
+		toDoObjects.forEach(function(toDo) {
+			if(toDo.tags.indexOf(tag) !== -1) toDosTags.push(toDo.description);
+		});
+		return {"name" : tag, "toDos" : toDosTags};
+	});
+	return organizeByTag;
+}

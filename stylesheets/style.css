@@ -138,8 +138,12 @@ footer h5 {
 }
 
 .content li:last-child {
-	margin-bottom: 0px; 
+	margin-bottom: 20px; 
 	background: white;
+}
+
+.content ul:last-child li:last-child {
+	margin-bottom: 0px;
 }
 
 .content h3 {
