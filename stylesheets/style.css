@@ -25,10 +25,6 @@ h2 {
 	font-size: 30px;
 }
 
-h3 {
-	font-size: 20px;
-}
-
 h5 {
 	font-size: 18px;
 }
@@ -144,6 +140,17 @@ footer h5 {
 .content li:last-child {
 	margin-bottom: 0px; 
 	background: white;
+}
+
+.content h3 {
+	margin: 10px 0px;
+	padding: 3px;
+	background: #ddd;
+	border-radius: 3px;
+}
+
+.content h3:first-child {
+	margin-top: 0px;
 }
 
 .content button {
