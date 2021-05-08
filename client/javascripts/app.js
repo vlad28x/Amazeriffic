@@ -40,9 +40,17 @@ var main = function(toDoObjects) {
 					var $inputTag = $(".content .tag");
 					var textTag = $inputTag.val().replace(/\s+/g, " ").trim().replace(/,\s/g, ",");
 					if(textDescription !== "" && textTag !== "") {
-						toDoObjects.push({"description" : textDescription, "tags" : textTag.split(",")});
+						var newToDo = {"description" : textDescription, "tags" : textTag};
+						toDoObjects.push(newToDo);
 						$inputDescription.val("");
 						$inputTag.val("");
+						toDos = toDoObjects.map(function(toDo) {
+							return toDo.description;
+						});
+						$.post("todos", newToDo, function(responce) {
+							console.log("Мы отправили данные и получили ответ сервера!");
+							console.log(responce);
+						});
 					}
 				}
 				var $inputDescriptionLabel = $("<p>").text("Описание");
