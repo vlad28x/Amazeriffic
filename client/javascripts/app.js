@@ -38,12 +38,13 @@ var main = function(toDoObjects) {
 					var $inputDescription = $(".content .description");
 					var textDescription = $inputDescription.val();
 					var $inputTag = $(".content .tag");
-					var textTag = $inputTag.val().replace(/\s+/g, " ").trim().replace(/,\s/g, ",");
+					var textTag = $inputTag.val().replace(/\s+/g, " ").trim().replace(/,\s/g, ",").split(",");
 					if(textDescription !== "" && textTag !== "") {
 						var newToDo = {"description" : textDescription, "tags" : textTag};
 						toDoObjects.push(newToDo);
 						$inputDescription.val("");
 						$inputTag.val("");
+						console.log(newToDo);
 						toDos = toDoObjects.map(function(toDo) {
 							return toDo.description;
 						});
