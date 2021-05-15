@@ -12,7 +12,9 @@ var main = function() {
 				toDos.forEach(function(todo) {
 					$content.prepend($("<li>").text(todo));
 				});
-				callback($content);
+				callback(null, $content);
+			}).fail(function(jqXHR, textStatus, error) {
+				callback(error, null);
 			});
 		}
 	});
@@ -27,7 +29,9 @@ var main = function() {
 				toDos.forEach(function(todo) {
 					$content.append($("<li>").text(todo));
 				});
-				callback($content);
+				callback(null, $content);
+			}).fail(function(jqXHR, textStatus, error) {
+				callback(error, null);
 			});
 		}
 	});
@@ -47,7 +51,9 @@ var main = function() {
 					$content.append($tagName);
 					$content.append($contentTag);
 				});
-				callback($content);
+				callback(null, $content);
+			}).fail(function(jqXHR, textStatus, error) {
+				callback(error, null);
 			});
 		}
 	});
@@ -81,7 +87,9 @@ var main = function() {
 					input();
 				});
 				$content.append($inputDescriptionLabel, $inputDescription, $inputTagDescription, $inputTag, $button);
-				callback($content);
+				callback(null, $content);
+			}).fail(function(jqXHR, textStatus, error) {
+				callback(error, null);
 			});
 		}
 	});
@@ -94,8 +102,12 @@ var main = function() {
 			$(".tabs a span").removeClass("active");
 			$spanElement.addClass("active");
 			$("main .content").empty();
-			tab.content(function($content) {
-				$("main .content").append($content);
+			tab.content(function(err, $content) {
+				if(err !== null) {
+					alert("Возникла проблема при обработке запроса: " + err);
+				} else {
+					$("main .content").append($content);
+				}
 			});
 			return false;
 		});
