@@ -1,74 +1,102 @@
-var main = function(toDoObjects) {
+var main = function() {
 	"use strict";
-	$(".tabs a span").toArray().forEach(function(element) {
-		$(element).on("click", function() {
-			var toDos = toDoObjects.map(function(toDo) {
-				return toDo.description;
-			});
-			var $element = $(element);
-			var $content;
-			$(".tabs a span").removeClass("active");
-			$element.addClass("active");
-			$("main .content").empty();
-			if ($element.parent().is(":nth-child(1)")) {
-				$content = $("<ul>");
+	var tabs = [];
+	tabs.push({
+		"name" : "Новые",
+		"content" : function(callback) {
+			$.getJSON("todos.json", function(toDoObjects) {
+				var toDos = toDoObjects.map(function(toDo) {
+					return toDo.description;
+				});
+				var $content = $("<ul>");
 				toDos.forEach(function(todo) {
 					$content.prepend($("<li>").text(todo));
 				});
-				$("main .content").append($content);
-			} else if ($element.parent().is(":nth-child(2)")) {
-				$content = $("<ul>");
+				callback($content);
+			});
+		}
+	});
+	tabs.push({
+		"name" : "Старые",
+		"content" : function(callback) {
+			$.getJSON("todos.json", function(toDoObjects) {
+				var toDos = toDoObjects.map(function(toDo) {
+					return toDo.description;
+				});
+				var $content = $("<ul>");
 				toDos.forEach(function(todo) {
 					$content.append($("<li>").text(todo));
 				});
-				$("main .content").append($content);
-			} else if ($element.parent().is(":nth-child(3)")) {
+				callback($content);
+			});
+		}
+	});
+	tabs.push({
+		"name" : "Теги",
+		"content" : function(callback) {
+			$.getJSON("todos.json", function(toDoObjects) {
+				var $content = $("<div>");
 				var organizedByTag = organizeByTag(toDoObjects);
 				organizedByTag.forEach(function(tag) {
-					var $tagName = $("<h3>").text(tag.name), $content = $("<ul>");
+					var $tagName = $("<h3>").text(tag.name);
+					var $contentTag = $("<ul>");
 					tag.toDos.forEach(function(description) {
 						var $li = $("<li>").text(description);
-						$content.append($li);
+						$contentTag.append($li);
 					});
-					$("main .content").append($tagName);
-					$("main .content").append($content);
+					$content.append($tagName);
+					$content.append($contentTag);
 				});
-			} else if ($element.parent().is(":nth-child(4)")) {
+				callback($content);
+			});
+		}
+	});
+	tabs.push({
+		"name" : "Добавить",
+		"content" : function(callback) {
+			$.getJSON("todos.json", function(toDoObjects) {
 				var input = function() {
-					var $inputDescription = $(".content .description");
 					var textDescription = $inputDescription.val();
-					var $inputTag = $(".content .tag");
 					var textTag = $inputTag.val().replace(/\s+/g, " ").trim().replace(/,\s/g, ",").split(",");
-					if(textDescription !== "" && textTag !== "") {
+					if(textDescription !== "" && textTag[0] !== "") {
 						var newToDo = {"description" : textDescription, "tags" : textTag};
 						toDoObjects.push(newToDo);
 						$inputDescription.val("");
 						$inputTag.val("");
 						console.log(newToDo);
-						toDos = toDoObjects.map(function(toDo) {
-							return toDo.description;
-						});
 						$.post("todos", newToDo, function(responce) {
 							console.log("Мы отправили данные и получили ответ сервера!");
 							console.log(responce);
+							$(".tabs a:first-child span").trigger("click");
 						});
 					}
 				}
+				var $content = $("<div>");
 				var $inputDescriptionLabel = $("<p>").text("Описание");
 				var $inputDescription = $("<input>").addClass("description");
 				var $inputTagDescription = $("<p>").text("Теги");
 				var $inputTag = $("<input>").addClass("tag");
 				var $button = $("<button>").text("+");
-				$("main .content").append($inputDescriptionLabel, $inputDescription, $inputTagDescription, $inputTag, $button);
-				$(".content button").on("click", function() {
+				$button.on("click", function() {
 					input();
-				}); 
-				$(".content input").on("keypress", function(event) {
-					if(event.keyCode === 13) {
-						input();
-					}
 				});
-			}
+				$content.append($inputDescriptionLabel, $inputDescription, $inputTagDescription, $inputTag, $button);
+				callback($content);
+			});
+		}
+	});
+	tabs.forEach(function(tab) {
+		var $aElement = $("<a>").attr("href", ""),
+		$spanElement = $("<span>").text(tab.name);
+		$aElement.append($spanElement);
+		$(".tabs").append($aElement);
+		$spanElement.on("click", function() {
+			$(".tabs a span").removeClass("active");
+			$spanElement.addClass("active");
+			$("main .content").empty();
+			tab.content(function($content) {
+				$("main .content").append($content);
+			});
 			return false;
 		});
 	});
@@ -91,7 +119,5 @@ function organizeByTag(toDoObjects) {
 	return organizeByTag;
 }
 $(document).ready(function() {
-	$.getJSON("todos.json", function(toDoObjects) {
-		main(toDoObjects);
-	});
+	main();
 });

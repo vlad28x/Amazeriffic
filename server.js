@@ -37,16 +37,9 @@ app.post("/todos", function(req, res) {
 	newToDo.save(function(err, result) {
 		if(err !== null) {
 			console.log(err);
-			res.send("ERROR");
+			res.json(err);
 		} else {
-			ToDo.find({}, function(err, result) {
-				if(err !== null) {
-					console.log(err);
-					res.send("ERROR");
-				} else {
-					res.json(result);
-				}
-			});
+			res.json(result);
 		}
 	});
 });
