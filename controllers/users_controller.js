@@ -19,7 +19,17 @@ UsersController.index = function(req, res) {
 	res.send(200);
 };
 UsersController.show = function(req, res) {
-	res.send(200);
+	console.log("show action called");
+	User.find({"username" : req.params.username}, function(err, result) {
+		if(err) {
+			console.log(err);
+			res.send(500, err);
+		} else if(result.length !== 0) {
+			res.sendfile("./client/list.html");
+		} else {
+			res.send(404);
+		}
+	});
 };
 UsersController.create = function(req, res) {
 	res.send(200);

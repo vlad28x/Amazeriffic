@@ -1,7 +1,8 @@
 var express = require("express"),
 http = require("http"),
 app = express(),
-ToDosController = require("./controllers/todos_controller.js"),
+toDosController = require("./controllers/todos_controller.js"),
+usersController = require("./controllers/users_controller.js"),
 mongoose = require("mongoose");
 app.use(express.static(__dirname + "/client"));
 app.use(express.urlencoded({extended : true}));
@@ -13,6 +14,11 @@ db.on("error", console.error.bind(console, "console error:"));
 db.once("open", function() {
 	console.log("mongoose: we're connected!");
 });
-app.get("/todos.json", ToDosController.index);
-app.post("/todos", ToDosController.create);
-app.get("/todos/:id", ToDosController.show);
+app.get("/users/:username/todos.json", toDosController.index);
+app.post("/users/:username/todos", toDosController.create);
+
+app.get("/users.json", usersController.index);
+app.post("/users", usersController.create);
+app.get("/users/:username", usersController.show);
+app.put("/users/:username", usersController.update);
+app.del("/users/:username", usersController.destroy);
