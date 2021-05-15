@@ -19,4 +19,18 @@ ToDosController.create = function(req, res) {
 		}
 	});
 };
+ToDosController.show = function(req, res) {
+	var id = req.params.id;
+	ToDo.find({"_id" : id}, function(err, todo) {
+		if(err !== null) {
+			res.json(500, err);
+		} else {
+			if(todo.length > 0) {
+				res.json(200, todo[0]);
+			} else {
+				res.send(404);
+			}
+		}
+	});	
+};
 module.exports = ToDosController;

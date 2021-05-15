@@ -15,3 +15,4 @@ db.once("open", function() {
 });
 app.get("/todos.json", ToDosController.index);
 app.post("/todos", ToDosController.create);
+app.get("/todos/:id", ToDosController.show);
