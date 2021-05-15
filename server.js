@@ -17,8 +17,16 @@ db.once("open", function() {
 });
 app.get("/todos.json", toDosController.index);
 app.post("/todos", toDosController.create);
+app.get("/todos/:id", toDosController.show);
+app.put("/todos/:id", toDosController.update);
+app.delete("/todos/:id", toDosController.destroy);
+
 app.get("/user/:username/todos.json", toDosController.index);
 app.post("/user/:username/todos", toDosController.create);
+app.get("/user/:username/todos/:id", toDosController.show);
+app.put("/user/:username/todos/:id", toDosController.update);
+app.delete("user/:username/todos/:id", toDosController.destroy);
+
 app.get("/user.json", usersController.index);
 app.post("/user", usersController.create);
 app.get("/user/:username", usersController.show);

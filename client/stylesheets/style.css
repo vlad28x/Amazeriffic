@@ -166,3 +166,8 @@ footer h5 {
 .content input {
 	font-size: 20px;
 }
+
+.right {
+	float: right;
+	padding-left: 20px;
+}

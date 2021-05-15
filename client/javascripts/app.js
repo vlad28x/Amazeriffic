@@ -5,12 +5,12 @@ var main = function() {
 		"name" : "Новые",
 		"content" : function(callback) {
 			$.getJSON("todos.json", function(toDoObjects) {
-				var toDos = toDoObjects.map(function(toDo) {
-					return toDo.description;
-				});
 				var $content = $("<ul>");
-				toDos.forEach(function(todo) {
-					$content.prepend($("<li>").text(todo));
+				toDoObjects.forEach(function(todo) {
+					var $todoListItem = EditDeleteOnClick(todo, function() {
+						$(".tabs a:first-child span").trigger("click");
+					});
+					$content.prepend($todoListItem);
 				});
 				callback(null, $content);
 			}).fail(function(jqXHR, textStatus, error) {
@@ -22,12 +22,12 @@ var main = function() {
 		"name" : "Старые",
 		"content" : function(callback) {
 			$.getJSON("todos.json", function(toDoObjects) {
-				var toDos = toDoObjects.map(function(toDo) {
-					return toDo.description;
-				});
 				var $content = $("<ul>");
-				toDos.forEach(function(todo) {
-					$content.append($("<li>").text(todo));
+				toDoObjects.forEach(function(todo) {
+					var $todoListItem = EditDeleteOnClick(todo, function() {
+						$(".tabs a:nth-child(2) span").trigger("click");
+					});
+					$content.append($todoListItem);
 				});
 				callback(null, $content);
 			}).fail(function(jqXHR, textStatus, error) {
@@ -86,6 +86,16 @@ var main = function() {
 				$button.on("click", function() {
 					input();
 				});
+				$inputDescription.on("keypress", function(event) {
+					if(event.keyCode === 13) {
+						input();
+					}
+				});
+				$inputTag.on("keypress", function(event) {
+					if(event.keyCode === 13) {
+						input();
+					}
+				});
 				$content.append($inputDescriptionLabel, $inputDescription, $inputTagDescription, $inputTag, $button);
 				callback(null, $content);
 			}).fail(function(jqXHR, textStatus, error) {
@@ -133,3 +143,39 @@ function organizeByTag(toDoObjects) {
 $(document).ready(function() {
 	main();
 });
+var EditDeleteOnClick = function (todo, callback) {
+	var $todoListItem = $("<li>").text(todo.description),
+		$todoEditLink = $("<a>").attr("href", "todos/" + todo._id).addClass("right"),
+		$todoRemoveLink = $("<a>").attr("href", "todos/" + todo._id).addClass("right");
+	$todoRemoveLink.text("Удалить");
+	$todoListItem.append($todoRemoveLink);
+	$todoRemoveLink.on("click", function () {
+		$.ajax({
+			url: "/todos/" + todo._id,
+			type: "DELETE"
+		}).done(function (responde) {
+			callback();
+		}).fail(function (err) {
+			console.log("error on delete 'todo'!");
+		});
+		return false;
+	});
+	$todoEditLink.text("Редактировать");
+	$todoEditLink.on("click", function() {
+		var newDescription = prompt("Введите новое наименование для задачи", todo.description);
+		if (newDescription !== null && newDescription.trim() !== "") {
+			$.ajax({
+				"url": "/todos/" + todo._id,
+				"type": "PUT",
+				"data": { "description": newDescription },
+			}).done(function (responde) {
+				callback();
+			}).fail(function (err) {
+				console.log("Произошла ошибка: " + err);
+			});
+		}
+		return false;
+	});
+	$todoListItem.append($todoEditLink);
+	return $todoListItem;
+}
