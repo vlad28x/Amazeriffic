@@ -1,47 +1,96 @@
 var User = require("../models/user.js"),
+ToDo = require("../models/user.js"),
+path = require("path"),
 UsersController = {};
-User.find({}, function(err, result) {
-	if(err !== null) {
-		console.log(err);
-	} else if(result.length === 0) {
-		console.log("Создание тестового пользователя…");
-		var exampleUser = new User({"username" : "Vlad"});
-		exampleUser.save(function(err, result) {
-			if(err) {
-				console.log(err);
-			} else {
-				console.log("Тестовый пользователь сохранен");
-			}
-		});
-	}
-});
 UsersController.index = function(req, res) {
-	console.log("index action called");
-	res.send(200);
+	ToDo.find({}, function(err, result) {
+		if(err !== null) {
+			res.status(500).json(err);
+		} else {
+			res.status(200).json(result);
+		}
+	});
 };
 UsersController.show = function(req, res) {
-	console.log("show action called");
-	User.find({"username" : req.params.username}, function(err, result) {
+	User.find({'username': req.params.username}, function(err, result) {
 		if(err) {
 			console.log(err);
-			res.status(500).send(err);
+			res.sendStatus(500);
 		} else if(result.length !== 0) {
-			res.sendFile('./client/list.html');
+			res.sendFile(path.join(__dirname, "..", "/client/list.html"));
 		} else {
-			res.send(404);
+		  res.sendStatus(404);
 		}
 	});
 };
 UsersController.create = function(req, res) {
-	console.log("create action called");
-	res.send(200);
+	var username = req.body.username;
+	User.find({"username" : username}, function(err, result) {
+		if(err) {
+			console.log(err);
+			res.status(500).json(err);
+		} else if(result.length === 0) {
+			var newUser = new User({"username" : username});
+			newUser.save(function(err, result) {
+				if(err) {
+					console.log(err);
+					res.status(500).json(err);
+				} else {
+					res.status(200).json(result);
+				}
+			});
+		} else {
+			res.sendStatus(501);
+		}
+	});
 };
 UsersController.update = function(req, res) {
-	console.log("update action called");
-	res.send(200);
+	var username = req.params.username;
+	User.find({'username': req.body.username}, function(err, result) {
+		if(err) {
+			console.log(err);
+			res.sendStatus(500);
+		} else if(result.length === 0) {
+			var newUsername = {$set: {username: req.body.username}};
+			User.updateOne({"username": username}, newUsername, function (err,user) {
+				if (err !== null) {
+					res.status(500).json(err);
+				} else {
+					if (user.n === 1 && user.nModified === 1 && user.ok === 1) {
+						res.status(200).json(user);
+					} else {
+						res.status(404);
+					}
+				}
+			});
+		} else {
+		  res.sendStatus(501);
+		}
+	});
+
 };
-UsersController.destroy = function(req, res) {
-	console.log("destroy action called");
-	res.send(200);
-};
+UsersController.destroy = function (req, res) { 
+	var username = req.params.username;
+	User.find({"username": username}, function (err, result) {
+		if (err) {
+            res.status(500).send(err);
+        } else if (result.length !== 0) {
+        	ToDo.deleteMany({"owner": result[0]._id}, function (err, todo) {
+				User.deleteOne({"username": username}, function (err, user) {
+					if (err !== null) {
+						res.status(500).json(err);
+					} else {
+						if (user.n === 1 && user.ok === 1 && user.deletedCount === 1) {
+							res.status(200).json(user);
+						} else {
+							res.sendStatus(404);
+						}
+					}
+				});
+        	});
+        } else {
+            res.sendStatus(404);
+        }
+	});
+}
 module.exports = UsersController;

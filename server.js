@@ -1,34 +1,32 @@
 var express = require("express"),
-http = require("http"),
-app = express(),
-toDosController = require("./controllers/todos_controller.js"),
-usersController = require("./controllers/users_controller.js"),
-mongoose = require("mongoose");
-app.use('/', express.static(__dirname + '/client'));
-app.use('/user/:username', express.static(__dirname + '/client'));
-app.use(express.urlencoded({extended : true}));
+	http = require("http"),
+	mongoose = require("mongoose"),
+	ToDosController = require("./controllers/todos_controller.js"),
+	UsersController = require("./controllers/users_controller.js"),
+	app = express(); 
 http.createServer(app).listen(3000);
-//подключаемся к хранилищу данных Amazeriffic в Mongo
+app.use('/',express.static(__dirname + "/client"));
+app.use(express.urlencoded({ extended: true }));
 mongoose.connect("mongodb://localhost/amazeriffic", {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "console error:"));
 db.once("open", function() {
-	console.log("Mongoose: we're connected!");
+	console.log("mongoose: we're connected!");
 });
-app.get("/todos.json", toDosController.index);
-app.post("/todos", toDosController.create);
-app.get("/todos/:id", toDosController.show);
-app.put("/todos/:id", toDosController.update);
-app.delete("/todos/:id", toDosController.destroy);
 
-app.get("/user/:username/todos.json", toDosController.index);
-app.post("/user/:username/todos", toDosController.create);
-app.get("/user/:username/todos/:id", toDosController.show);
-app.put("/user/:username/todos/:id", toDosController.update);
-app.delete("user/:username/todos/:id", toDosController.destroy);
+app.get("/todos.json", ToDosController.index);
+app.get("/todos/:id", ToDosController.show); 
+app.post("/todos", ToDosController.create);
+app.put("/todos/:id", ToDosController.update);
+app.delete("/todos/:id", ToDosController.destroy);
 
-app.get("/user.json", usersController.index);
-app.post("/user", usersController.create);
-app.get("/user/:username", usersController.show);
-app.put("/user/:username", usersController.update);
-app.delete("/user/:username", usersController.destroy);
+app.get("/user/:username/todos.json", ToDosController.index);
+app.post("/user/:username/todos", ToDosController.create);
+app.put("/user/:username/todos/:id", ToDosController.update);
+app.delete("/user/:username/todos/:id", ToDosController.destroy);
+
+app.get("/user.json", UsersController.index);
+app.post("/user", UsersController.create);
+app.get("/user/:username", UsersController.show);
+app.put("/user/:username", UsersController.update);
+app.delete("/user/:username", UsersController.destroy);

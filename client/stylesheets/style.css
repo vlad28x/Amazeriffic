@@ -22,7 +22,7 @@ h1 {
 }
 
 h2 {
-	font-size: 30px;
+	font-size: 25px;
 }
 
 h5 {
@@ -170,4 +170,25 @@ footer h5 {
 .right {
 	float: right;
 	padding-left: 20px;
+}
+
+.login {
+	background: #eee;
+	border-radius: 5px;
+	padding: 20px 10px;
+}
+
+.login input {
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+.login button {
+	font-size: 20px;
+	margin-right: 10px;
+	margin-bottom: 10px;  
+}
+
+.login button:nth-child(6) {
+	margin-left: 261px;
 }

@@ -17,7 +17,7 @@ ToDosController.index = function(req, res) {
 			if(err !== null) {
 				res.status(500).json(err);
 			} else if(result.length === 0) {
-				res.send(404);
+				res.sendStatus(404);
 			} else {
 				respondWithToDos({"owner" : result[0]._id});
 			}
