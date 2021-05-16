@@ -46,25 +46,35 @@ UsersController.create = function(req, res) {
 };
 UsersController.update = function(req, res) {
 	var username = req.params.username;
-	User.find({'username': req.body.username}, function(err, result) {
+	User.find({'username': username}, function(err, result) {
 		if(err) {
 			console.log(err);
-			res.sendStatus(500);
-		} else if(result.length === 0) {
-			var newUsername = {$set: {username: req.body.username}};
-			User.updateOne({"username": username}, newUsername, function (err,user) {
-				if (err !== null) {
-					res.status(500).json(err);
+			res.sendStatus(500)
+		} else if(result.length !== 0) {
+			User.find({'username': req.body.username}, function(err, result) {
+				if(err) {
+					console.log(err);
+					res.sendStatus(500);
+				} else if(result.length === 0) {
+					var newUsername = {$set: {username: req.body.username}};
+					User.updateOne({"username": username}, newUsername, function (err,user) {
+						console.log(user);
+						if (err !== null) {
+							res.status(500).json(err);
+						} else {
+							if (user.n === 1 && user.nModified === 1 && user.ok === 1) {
+								res.status(200).json(user);
+							} else {
+								res.status(404);
+							}
+						}
+					});
 				} else {
-					if (user.n === 1 && user.nModified === 1 && user.ok === 1) {
-						res.status(200).json(user);
-					} else {
-						res.status(404);
-					}
+				  res.status(501).json({"message" : "Такой пользователь уже существует!"});
 				}
 			});
 		} else {
-		  res.sendStatus(501);
+			res.status(501).json({"message" : "Такой пользователь отсутствует!"});
 		}
 	});
 

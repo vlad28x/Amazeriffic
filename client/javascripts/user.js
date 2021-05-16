@@ -53,7 +53,7 @@ var main = function() {
 					$input.val(newUsername);
 					alert('Имя пользователя успешно изменено');
 				}).fail(function(error) {
-					alert("Произошла ошибка!\n" + error.status + " " + "Такой пользователь уже существует!");	
+					alert("Произошла ошибка!\n" + error.status + " " + error.responseJSON.message);	
 				});
 			}
 		}
