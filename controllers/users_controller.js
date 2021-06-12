@@ -1,5 +1,5 @@
 var User = require("../models/user.js"),
-ToDo = require("../models/user.js"),
+ToDo = require("../models/todo.js"),
 path = require("path"),
 UsersController = {};
 UsersController.index = function(req, res) {
